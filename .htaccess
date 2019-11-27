@@ -1,0 +1,21 @@
+#Stop direct access to Directories
+Options -Indexes
+
+#Stop access of files
+<FilesMatch "\.(htaccess|htpasswd|ini|phps|php5|fla|psd|log|sh|tpl|hook)$">
+	Order Allow,Deny
+	Deny from all
+</FilesMatch>
+
+#Site Routing
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /Capt/
+	RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+	RewriteRule ^ %1 [R=301,L]
+	RewriteRule ^(.*)\.html $1.php [R=301,L]
+	RewriteRule ^(.*)\.jsp $1.php [R=301,L]
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME}.php -f
+	RewriteRule ^(.*?)/?$ $1.php [NC,L]
+</IfModule>
